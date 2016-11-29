@@ -4,15 +4,17 @@
 Host B #表示主机B的名称
 HostName BBB.BBB.BBB.BBB #主机B的IP地址、域名或者能被域名系统解析的B的主机别称
 User user #以user用户登录主机B
-其他配置项请man ssh_config
-2 在主机A上执行：
+# 其他配置项请man ssh_config
+2 修改config的权限：
+chmod 600 .ssh/config
+3 在主机A上执行：
 ssh-keygen -t rsa
 输入登录主机B的密码，确认登录主机B的密码
-3 在主机A上执行：
+4 在主机A上执行：
 cp .ssh/id_rsa.pub .ssh/authorized_keys #id_rsa.pub是公钥
 scp .ssh/authorized_keys B:~/.ssh
 如果主机B上已有authorized_keys，那么先把主机A上的authorized_keys复制到主机B上的另外目录，然后登录主机B后执行：cat some_dir/authorized_keys >> .ssh/authorized_keys
-4 在主机B上执行：
+5 在主机A上执行：
 ssh B
 然后输入私钥，即可登录主机B，并且以后登录不再需要输入密码，如果要免密码登录其他主机，重复执行第3步骤即可
 
