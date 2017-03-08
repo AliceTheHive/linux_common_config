@@ -1,0 +1,103 @@
+1.deb软件包的结构体：
+DEBIAN目录
++--control（必选）
++--preinst（可选）
++--prerm（可选）
++--postinst（可选）
++--postrm（可选）
++--copyright（可选）
++--changelog（可选）
++--conffiles（可选）
+其他目录（etc，usr，opt等）
+
+2.文件描述：
+control：
+Package（软件包的名称，必须）
+Version（版本，必须）
+Description（描述，必须）
+
+Section（软件类别，常见的有utils，net，mail，text，x11等）
+Priority（对系统的重要程度，如required，standard，optional，extra等）
+Essential（系统基础软件包，选项为yes/no）
+Architecture（软件包在什么架构上运行：如i386，amd64，sparc，alpha，powerpc等）
+Source（软件包的源代码名称）
+Depends（软件包依赖的其他软件包和库文件，如果依赖多个软件包和库文件，用逗号隔开）
+Pre-Depends（软件包安装前必须已经安装、配置的依赖性软件包和库文件）
+Recommends（推荐安装的其他软件包和库文件）
+Suggests（建议安装的其他软件包和库文件）
+preinst：
+软件包安装前要进行的工作，依据其中的脚本执行。
+prerm：
+软件包卸载前需要执行的脚本。
+postinst：
+软件包安装完后需要执行的配置工作。
+postrm：
+软件包卸载后需要执行的脚本。
+
+3.例子：
+testdeb
++--DEBIAN
+   +--control
+   +--postinst
+   +--postrm
++--usr/share/testdeb
+   +--testdeb.so.1.0.0
+
+4.制作安装包步骤：
+p1.假设当前目录为/home/test，以root身份执行：
+mkdir testdeb
+mkdir testdeb/DEBIAN
+mkdir testdeb/usr/share/testdeb
+touch testdeb/DEBIAN/control
+touch testdeb/DEBIAN/preinst
+touch testdeb/DEBIAN/postrm
+touch testdeb/usr/share/testdeb/testdeb.so.1.0.0
+p2.填写control的内容：
+Package: testdeb-for-example（名称中间不能有空格）
+Version: 1.0.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Maintainer: mail or address
+Description: A testing deb package.
+（这儿必须空一行再结束）
+p3.填写preinst的内容：
+#!/bin/sh
+
+TESTDEB="/usr/share/testdeb"
+
+if [ ! -e $TESTDEB ]; then
+  mkdir -p $TESTDEB
+else
+  if [ ! -d $TESTDEB ]; then
+    echo "Fatal: $TESTDEB exists and not a directory!"
+    exit 1;
+  fi
+fi
+p4.填写postrm的内容：
+#!/bin/sh
+
+TESTDEB="/usr/share/testdeb"
+
+if [ -e $TESTDEB ] && [ -d $TESTDEB ]; then
+  rm -rf $TESTDEB;
+fi
+p5.给DEBIAN目录添加正确的权限：
+chmod -R 755 DEBIAN
+p6.打包：
+dpkg -b testdeb testdeb-1.0.0.deb
+
+5.其他
+安装deb包：
+dpkg -i testdeb-1.0.0.deb
+卸载deb包：
+dpkg -r testdeb-for-example（control文件中Package后的软件包名称）
+查看deb包文件内容：
+dpkg -c testdeb-1.0.0.deb
+查看deb包的信息：
+dpkg --info testdeb-1.0.0.deb
+解压deb包中要安装的文件：
+dpkg -x testdeb-1.0.0.deb testdeb
+解压deb包中的DEBIAN目录：
+dpkg -e testdeb-1.0.0.deb testdeb/DEBIAN
+
