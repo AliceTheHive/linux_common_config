@@ -1,0 +1,10 @@
+某些要求以root用户权限运行的程序，例如wireshark，普通用户打开时是没有权限打开网卡的，因为/usr/bin/dumpcap的所有者是root，如果是使用系统的软件包管理套件安装的wireshark，那么它的所有组是wireshark，如果是编译安装的（不修改默认设置），那么它的所有组是root，要想普通用户打开wireshark时有权限打开网卡，那么可以（以下步骤都以root用户权限执行）：
+1.如果/usr/bin/dumpcap的所有组是root：
+#groupadd wireshark
+#chgrp wireshark /usr/bin/dumpcap
+2.将普通用户加入wireshark组，假设普通用户为user，将它加入wireshark组：
+#usermod user -aG wireshark
+3.设置/usr/bin/dumpcap的setgid权限，允许普通用户在执行wireshark时，以wireshark所有组的权限执行wireshark：
+#chmod g+s /usr/bin/dumpcap
+4.注销普通用户后再登录系统，就可以以普通用户身份执行wireshark了
+
