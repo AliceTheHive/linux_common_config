@@ -1,0 +1,10 @@
+1.diff和patch
+a.假设某个目录下有两个文件夹，old和new，分别表示原有的代码和修改后的代码，那么要生成patch文件，那么可以执行：
+diff -uaNr old new > diff.patch
+b.给旧的文件夹打补丁，进入old文件夹，执行：
+patch -p1 < ../diff.patch
+注意：-pNUM中的数字NUM表示舍弃diff.patch中old文件夹前导的NUM层路径，即如果生成patch文件时是在old文件夹中生成的，如：
+diff -uaNr . ../new > ../diff.patch
+那么打补丁时，应该进入old文件夹，执行：
+patch -p0 < ../diff.patch
+
