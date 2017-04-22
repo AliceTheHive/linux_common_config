@@ -1,0 +1,46 @@
+下列说明以Debian系统，Nginx环境，PHP5.4.x和yaf-2.3.5为例
+要求系统安装了：
+gcc（编译yaf）
+Nginx（Web服务器）
+php5-dev（phpize）
+php5-fpm（运行PHP代码）
+
+1.下载yaf，地址：http://pecl.php.net/package/yaf
+2.编译yaf：
+# tar zxvf yaf-2.3.5.tgz
+# cd yaf-2.3.5
+# phpize && ./configure && make && make install
+3.生成yaf框架代码：
+# wget https://github.com/laruence/php-yaf/archive/master.zip
+# unzip master.zip
+# cd yaf-master/tools/cg
+# php yaf_cg app #app为生成的目录名称，路径是output
+# cp output/app /var/www -rvf
+4.编辑Nginx的配置文件，在server块中加入处理PHP请求的配置：
+# vim /usr/local/nginx/conf/nginx.conf #路径有可能不同
+# location ~ .*\.php$ {
+      root /var/www;
+      fastcgi_pass  unix:/var/run/php5-fpm.sock;
+      fastcgi_index index.php;
+      fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+      include fastcgi_params;
+  }
+5.添加yaf扩展的配置：
+# vim /etc/php5/fpm/php-fpm.conf
+加入如下内容：
+[yaf]
+extension = yaf.so
+6.重启php5-fpm：
+# /etc/init.d/php5-fpm restart
+7.在/var/www下新建一个文件，名称自拟，假设为phpinfo.php，输入以下内容：
+<?php
+    phpinfo();
+在浏览器中输入：
+localhost/phpinfo.php，如果有关于yaf的内容，表示加入yaf成功。
+7.重启Nginx：
+# /usr/local/nginx/sbin/nginx -s reload #路径有可能不同
+在浏览器中输入：
+localhost/index.php，如果出现：
+Hello World! I am Stranger
+表示配置成功。
+
