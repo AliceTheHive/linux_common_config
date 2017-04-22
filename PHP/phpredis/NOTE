@@ -1,0 +1,18 @@
+1.克隆phpredis的代码：
+# git clone https://github.com/phpredis/phpredis.git
+2.克隆igbinary的代码：
+# git clone https://github.com/igbinary/igbinary.git
+3.编译igninary：
+# phpize
+# ./configure --enable-igbinary
+# make && make install
+4.编译phpredis：
+# phpize
+# ./configure --enable-redis-igbinary
+# make && make install
+5.配置php5-fpm：
+# vim /etc/php5/fpm/php.ini
+添加如下内容：
+extension = igbinary.so
+extension = redis.so
+
