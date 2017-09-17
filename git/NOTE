@@ -1,0 +1,19 @@
+1.为代码加tag：
+# git tag -a vx.y.z -m "Version x.y.z published."
+2.查看tag：
+# git tag
+3.删除本地tag：
+# git tag -d vx.y.z
+4.删除远程tag：
+# git push origin --delete vx.y.z
+5.基于tag修复bug：
+# git show vx.y.z，然后记录下commit id
+# git reset --hard commit_id
+# 创建bugfix分支：git checkout -b bugfix
+# 切回master分支：git checkout master
+# git reflog，然后记录下master最后更新的commit id
+# git reset --hard commit_id
+# git checkout bugfix
+# 修复bug后，push代码，再给代码打上tag（更新），push tag
+# 将bugfix分支合并到master分支：git merge bugfix
+
