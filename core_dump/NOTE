@@ -1,0 +1,5 @@
+产生core文件：
+1.允许系统产生core文件: ulimit -c number (单位为字节)
+2.开启core文件后缀添加pid的规则: echo 1 > /proc/sys/kernel/core_uses_pid
+3.测试产生core文件: kill -s SIGSEGV $$
+
