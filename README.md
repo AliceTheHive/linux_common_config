@@ -1,4 +1,4 @@
 # linux_common_config
 Some common configurations used in GNU/Linux.
 # samples
-![flv.js (HTTP-FLV)](video/flv.js_HTTP_FLV.mp4)
+<iframe src="https://raw.githubusercontent.com/winshining/linux_common_config/master/video/flv.js_HTTP_FLV.mp4" frameborder="0"></iframe>
