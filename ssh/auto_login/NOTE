@@ -9,12 +9,14 @@ User user #以user用户登录主机B
 chmod 600 .ssh/config
 3 在主机A上执行：
 ssh-keygen -t rsa
-输入登录主机B的密码，确认登录主机B的密码
+输入密钥存放位置和名称
+输入密钥加密密码
+确认密钥加密密码
 4 在主机A上执行：
-cp .ssh/id_rsa.pub .ssh/authorized_keys #id_rsa.pub是公钥
-scp .ssh/authorized_keys B:~/.ssh
-如果主机B上已有authorized_keys，那么先把主机A上的authorized_keys复制到主机B上的另外目录，然后登录主机B后执行：cat some_dir/authorized_keys >> .ssh/authorized_keys
+scp .ssh/id_rsa.pub B:~/.ssh/id_rsa.pub_client #id_rsa.pub是上一步生成的公钥
+如果主机B上的/home/user/.ssh文件夹下没有authorized_keys，那么以user用户登录主机B后执行：mv .ssh/id_rsa.pub_client .ssh/authorized_keys
+否则执行cat .ssh/id_rsa.pub_client >> .ssh/authorized_keys
 5 在主机A上执行：
 ssh B
-然后输入私钥，即可登录主机B，并且以后登录不再需要输入密码，如果要免密码登录其他主机，重复执行第3步骤即可
+然后输入私钥加密密码，即可登录主机B，并且以后登录不再需要输入密码，如果要免密码登录其他主机，重复执行第3步骤即可
 
